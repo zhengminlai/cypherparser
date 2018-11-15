@@ -1,10 +1,11 @@
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.CompilerException
 import org.scalatest.FunSuite
 
 class CypherParserTest extends FunSuite {
   test("infer schema for ConnectedSegments") {
     try {
-      val cypher = CypherParser.parseString(
+      CypherToJson.parseCypherToJson(
         """MATCH
           |  (sensor:Sensor)<-[mb1:monitoredBy]-(segment1:Segment),
           |  (segment1:Segment)-[ct1:connectsTo]->
@@ -19,9 +20,8 @@ class CypherParserTest extends FunSuite {
           |  (segment6:Segment)-[mb6:monitoredBy]->(sensor:Sensor)
           |RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
           |""".stripMargin)
-      CypherToJson.parseCypherToJson(cypher)
     } catch {
-      case e: Exception => println(e.toString())
+      case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage())
     }
   }
 

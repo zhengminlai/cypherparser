@@ -52,7 +52,6 @@ object CypherParser {
         seenError = true
         firstError = issue.getMessage
       }
-      println(issue.getMessage)
     }
     if (seenError) {
       throw new CompilerException(s"Error during cypher parse, the first error was: ${firstError}")

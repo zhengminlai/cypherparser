@@ -2,7 +2,8 @@ import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import org.slizaa.neo4j.opencypher.openCypher.impl._
 
 object CypherToJson{
-  def parseCypherToJson(cypher: Cypher) = {
+  def parseCypherToJson(queryStr: String) = {
+    val cypher: Cypher = CypherParser.parseString(queryStr)
     var cypher_impl: CypherImpl = null
     if (cypher.isInstanceOf[CypherImpl]){
 
