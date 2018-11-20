@@ -23,7 +23,7 @@ class CypherParserTest extends FunSuite{
           |  (segment5:Segment)-[mb5:monitoredBy]->(sensor:Sensor),
           |  (segment6:Segment)-[mb6:monitoredBy]->(sensor:Sensor)
           |RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
-          |""".stripMargin)
+          |""".stripMargin, "query.json")
     } catch {
       case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage())
     }
@@ -40,7 +40,7 @@ class CypherParserTest extends FunSuite{
           |  (segment4:Segment)-[ct4:connectsTo]->
           |  (segment5:Segment)-[ct5:connectsTo]->(segment6:Segment)
           |RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
-          |""".stripMargin)
+          |""".stripMargin, "query.json")
     } catch {
       case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage())
     }
@@ -57,7 +57,7 @@ class CypherParserTest extends FunSuite{
           |  (segment4)-[ct4]->
           |  (segment5)-[ct5]->(segment6)
           |RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
-          |""".stripMargin)
+          |""".stripMargin, "query.json")
     } catch {
       case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage())
     }

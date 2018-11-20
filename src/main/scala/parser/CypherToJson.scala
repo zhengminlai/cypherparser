@@ -1,5 +1,7 @@
 package parser
 
+import java.io.{File, PrintWriter}
+
 import entity.QueryGraph
 import org.slizaa.neo4j.opencypher.openCypher.{Cypher, NodePattern, RelationshipPattern}
 import org.slizaa.neo4j.opencypher.openCypher.impl._
@@ -16,7 +18,6 @@ object CypherToJson {
   var edges: List[(String, String, Option[String])] = List()
   val nodeSet: mutable.HashSet[String] = mutable.HashSet()
   val edgeSet: mutable.HashSet[(String, String)] = mutable.HashSet()
-  val partialOrder: Option[List[(String, String)]] = None
 
   // Parse the given node
   def parseNode (node: NodePattern)= {
@@ -36,7 +37,6 @@ object CypherToJson {
           nodeLabel = Some(nodeLabelStr)
         }
       }
-      // println("node name:" + node.getVariable.getName + ", node label: " + nodeLabel)
       nodeSet.add(node.getVariable.getName)
       vertices = (node.getVariable.getName, nodeLabel) :: vertices
     }
@@ -51,10 +51,6 @@ object CypherToJson {
     if (edgeLabelStr.length() > 0){
       edgeLabel = Some(edgeLabelStr)
     }
-    /*println("Relationship name: " + edgeLabel +
-     ", incoming: " + relationshipType.isIncoming + ", outgoing: " +
-    relationshipType.isOutgoing + ", between " + lastNode.getVariable.getName
-      + " and " + curNode.getVariable.getName)*/
 
     if (relationshipType.isIncoming || relationshipType.isOutgoing) {
       isDirected = true
@@ -81,7 +77,7 @@ object CypherToJson {
     }
   }
 
-  def parseCypherToJson(queryStr: String) = {
+  def parseCypherToJson(queryStr: String, outputPath: String) = {
     val cypher: Cypher = CypherParser.parseString(queryStr)
     cypher match {
       case cypherImpl: CypherImpl =>
@@ -136,13 +132,15 @@ object CypherToJson {
               }
             }
             println("Parsed query node len:" + vertices.length + ", edge len:" + edges.length)
-            val query_graph = QueryGraph(isDirected, isLabelled, vertices, edges, partialOrder).toJson
-            println(query_graph.prettyPrint)
+            val query_graph = QueryGraph(isDirected, isLabelled, vertices, edges, None).toJson
+            var jsonQuery = query_graph.prettyPrint
+
+            val writer = new PrintWriter(new File(outputPath))
+            writer.write(jsonQuery)
+            writer.close()
           case _ =>
         }
       case _ =>
     }
   }
-
-
 }
