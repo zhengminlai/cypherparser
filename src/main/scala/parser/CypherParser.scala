@@ -16,6 +16,7 @@ import org.slizaa.neo4j.opencypher.openCypher.Cypher
 import scala.collection.JavaConverters._
 
 
+/// Cypher parser
 object CypherParser {
   def parseFile(fileName: String): Cypher = {
     Logger.getLogger("org.eclipse.xtext").setLevel(Level.ERROR)
