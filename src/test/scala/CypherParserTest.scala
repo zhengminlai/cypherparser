@@ -1,8 +1,12 @@
 
 import com.sun.org.apache.xalan.internal.xsltc.compiler.CompilerException
 import org.scalatest.FunSuite
+import parser.CypherToJson
+import spray.json._
+import entity.QueryGraph
+import entity.MyJsonProtocol._
 
-class CypherParserTest extends FunSuite {
+class CypherParserTest extends FunSuite{
   test("infer schema for ConnectedSegments") {
     try {
       CypherToJson.parseCypherToJson(
@@ -25,4 +29,11 @@ class CypherParserTest extends FunSuite {
     }
   }
 
+  test("Parsing query graph to json"){
+    val vertices = List((0, None),(1, None), (2, None))
+    val edges = List((0,1,None), (0,2,None), (1,2,None))
+    val partial_order = Some(List((0,1),(0,2),(1,2)))
+    val query_graph = QueryGraph(false, false, vertices, edges, partial_order).toJson
+    println(query_graph.prettyPrint)
+  }
 }
