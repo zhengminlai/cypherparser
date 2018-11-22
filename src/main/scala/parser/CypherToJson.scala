@@ -6,6 +6,7 @@ import entity.QueryGraph
 import org.slizaa.neo4j.opencypher.openCypher.{Cypher, NodePattern, RelationshipPattern}
 import org.slizaa.neo4j.opencypher.openCypher.impl._
 import entity.MyJsonProtocol._
+import exception.NoPatGraphException
 import spray.json._
 
 import scala.collection.mutable
@@ -20,7 +21,7 @@ object CypherToJson {
   val edgeSet: mutable.HashSet[(String, String)] = mutable.HashSet()
 
   // Parse the given node
-  def parseNode (node: NodePattern)= {
+  def parseNode(node: NodePattern) = {
     var nodeLabelStr: String = ""
     var nodeLabel: Option[String] = None
     val nodeLabelIter = node.getNodeLabels.iterator()
@@ -48,7 +49,7 @@ object CypherToJson {
     // Note that we drop the '[' and ']' in the edge label
     val edgeLabelStr: String = relationshipType.getDetail.getRelTypeNames.toString.dropRight(1).drop(1)
 
-    if (edgeLabelStr.length() > 0){
+    if (edgeLabelStr.length() > 0) {
       edgeLabel = Some(edgeLabelStr)
     }
 
@@ -122,25 +123,28 @@ object CypherToJson {
                               parseEdge(relationshipType, lastNode, curNode)
 
                               lastNode = curNode
-                            case _ =>
+                            case _ => throw new NoPatGraphException(s"Error during parsing pattern graph: No pattern graph found")
                           }
                         }
-                      case _ =>
+                      case _ => throw new NoPatGraphException(s"Error during parsing pattern graph: No pattern graph found")
                     }
                   }
-                case _ =>
+                case _ => throw new NoPatGraphException(s"Error during parsing pattern graph: No pattern graph found")
               }
             }
             println("Parsed query node len:" + vertices.length + ", edge len:" + edges.length)
+            if (vertices.length == 0) {
+              throw new NoPatGraphException(s"Error during parsing pattern graph: No pattern graph found")
+            }
             val query_graph = QueryGraph(isDirected, isLabelled, vertices, edges, None).toJson
-            var jsonQuery = query_graph.prettyPrint
+            val jsonQuery = query_graph.prettyPrint
 
             val writer = new PrintWriter(new File(outputPath))
             writer.write(jsonQuery)
             writer.close()
-          case _ =>
+          case _ => throw new NoPatGraphException(s"Error during parsing pattern graph: No pattern graph found")
         }
-      case _ =>
+      case _ => throw new NoPatGraphException(s"Error during parsing pattern graph: No pattern graph found")
     }
   }
 }

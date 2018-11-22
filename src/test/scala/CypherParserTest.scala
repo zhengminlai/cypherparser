@@ -5,6 +5,7 @@ import parser.CypherToJson
 import spray.json._
 import entity.QueryGraph
 import entity.MyJsonProtocol._
+import exception.NoPatGraphException
 
 class CypherParserTest extends FunSuite{
   test("infer schema for ConnectedSegments") {
@@ -25,7 +26,8 @@ class CypherParserTest extends FunSuite{
           |RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
           |""".stripMargin, "query.json")
     } catch {
-      case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage())
+      case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage)
+      case e: NoPatGraphException => println(s"Error during parsing pattern graph" + e.getMessage)
     }
   }
 
@@ -42,7 +44,8 @@ class CypherParserTest extends FunSuite{
           |RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
           |""".stripMargin, "query.json")
     } catch {
-      case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage())
+      case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage)
+      case e: NoPatGraphException => println(s"Error during parsing pattern graph" + e.getMessage)
     }
   }
 
@@ -59,7 +62,18 @@ class CypherParserTest extends FunSuite{
           |RETURN sensor, segment1, segment2, segment3, segment4, segment5, segment6
           |""".stripMargin, "query.json")
     } catch {
-      case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage())
+      case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage)
+      case e: NoPatGraphException => println(s"Error during parsing pattern graph" + e.getMessage)
+    }
+  }
+
+  test("should compile CREATE with a single edges") {
+    try {
+      CypherToJson.parseCypherToJson(
+        "CREATE (n:Person)-[:LIVES]->(c:City)", "query.json")
+    } catch {
+      case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage)
+      case e: NoPatGraphException => println(s"Error during parsing pattern graph" + e.getMessage)
     }
   }
 
