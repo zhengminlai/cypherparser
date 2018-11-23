@@ -1,7 +1,7 @@
 # cypherparser
 This is the cypher parser tool to convert cypher to query graph json as the input in PatMat Engine(https://github.com/UNSW-database/pattern_matching).
 
-### Running the executable jar file
+### Running the executable file
 Build the project: gradle build
 
 unzip the file build/distributions/cypherparser-1.0.SNAPSHOT.zip
