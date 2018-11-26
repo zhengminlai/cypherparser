@@ -1,3 +1,5 @@
+import com.sun.org.apache.xalan.internal.xsltc.compiler.CompilerException
+import exception.NoPatGraphException
 import parser.CypherToJson
 
 object ParserBin {
@@ -39,8 +41,12 @@ object ParserBin {
       println("The `output-file` parameter has not been specified, please view the usage:\n" + usage)
       return
     }
-    println("Cypher: " + cypherQuery + ", Output file: " + outputFile)
 
-    CypherToJson.parseCypherToJson(cypherQuery.toString(), outputFile)
+    try {
+      CypherToJson.parseCypherToJson(cypherQuery.toString(), outputFile)
+    }catch {
+      case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage)
+      case e: NoPatGraphException => println(s"Error during parsing pattern graph" + e.getMessage)
+    }
   }
 }
