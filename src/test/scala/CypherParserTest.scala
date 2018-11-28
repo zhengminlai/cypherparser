@@ -80,7 +80,7 @@ class CypherParserTest extends FunSuite{
   test("se") {
     try {
       CypherToJson.parseCypherToJson(
-        "Match (a:A)-[b:B]->(c:C) RETURN a,c", "query.json")
+        "Match (a:A)-[b:B]-(c:C) RETURN a,c", "query.json")
     } catch {
       case e: CompilerException => println(s"Error during cypher parsing, the first error was" + e.getMessage)
       case e: NoPatGraphException => println(s"Error during parsing pattern graph" + e.getMessage)

@@ -73,7 +73,6 @@ object CypherToJson {
         edgeSet.add((lastNodeName, curNodeName))
         edgeSet.add((curNodeName, lastNodeName))
         edges = (lastNodeName, curNodeName, edgeLabel) :: edges
-        edges = (curNodeName, lastNodeName, edgeLabel) :: edges
       }
     }
   }
