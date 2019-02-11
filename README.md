@@ -14,7 +14,7 @@ This is the cypher parser tool to convert cypher to query graph json as the inpu
 5. Right click `build.gradle` and  `Run build`. Then you can right click `CypherParserTest.scala` to run tests.
 
 ### Running the executable file
-You can download the executable file from https://drive.google.com/open?id=1rbiIttvNTWfw5QK0LhfDV7Zd6CMm7fZd,
+You can download the executable file from https://drive.google.com/drive/folders/1rbiIttvNTWfw5QK0LhfDV7Zd6CMm7fZd?usp=sharing,
 or you can build the project by yourself as follows:
 
 1. Build the project: gradle build
